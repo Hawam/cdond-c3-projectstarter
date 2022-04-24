@@ -185,7 +185,7 @@ jobs:
             # Save the ip
             aws ec2 describe-instances \
             --query "Reservations[*].Instances[*].PublicIpAddress" \
-            --filters Name=tag:project,Values=udapeoplebackend-${CIRCLE_WORKFLOW_ID:0:7} \
+            --filters Name=tag:Name,Values=udapeoplebackend-${CIRCLE_WORKFLOW_ID:0:7} \
             --output text >> .circleci/ansible/inventory.txt
             
       - run:
