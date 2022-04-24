@@ -168,36 +168,30 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              --tags project="udapeoplebackend${CIRCLE_WORKFLOW_ID:0:7}" \
+              --tags project=udapeople \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"    
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"   
       - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --tags project="udapeoplefrontend${CIRCLE_WORKFLOW_ID:0:7}" \
-               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              --tags project=udapeople \
+              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" 
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             # Save the ip
-            backendip=$(aws cloudformation \
-              list-exports --query "Exports[?Name==\`backendIP\`].Value" \
-              --no-paginate --output text)
-            echo "$backendip"
-            echo "$backendip" >> .circleci/ansible/inventory.txt
+            aws ec2 describe-instances \
+            --query "Reservations[*].Instances[*].PublicIpAddress" \
+            --filters Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
+            --output text >> .circleci/ansible/inventory.txt
             
-      - run:
-          name: Ensure inventory saved
-          command: |
-            ls ~/
-            cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
-          root: .circleci
+          root: ~/
           paths:
-            - ansible/inventory.txt
+            - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure  
       - destroy-environment      
 
@@ -241,6 +235,7 @@ jobs:
           name: Configure server
           command: |
             ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ~/ansible/inventory.txt .circleci/ansible/configure-server.yml
+
             
       # Here's where you will add some code to rollback on failure
       - destroy-environment
