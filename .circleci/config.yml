@@ -335,7 +335,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "c4:9b:66:00:29:8a:0a:dd:31:c1:a2:0c:be:db:3b:61"
+            - "13:4e:c9:00:61:95:49:48:d1:d4:ff:a1:7a:7d:d3:ac"
       - attach_workspace:
           at: ~/
       - run:
@@ -395,7 +395,7 @@ jobs:
             echo "http://$BACKEND_IP:3030/api/status"
             if curl "${BACKEND_IP}:3030/api/status" | grep "ok"
             then
-                return 0
+                return 1
             else
                 return 1
             fi
