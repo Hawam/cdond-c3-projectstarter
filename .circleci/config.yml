@@ -169,16 +169,16 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project="udapeoplebackend${CIRCLE_WORKFLOW_ID:0:7}" \
-               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"    
+              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"    
       - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project="udapeoplefrontend${CIRCLE_WORKFLOW_ID:0:7}" \
-               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -302,7 +302,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filters Name=tag:project,Values=udapeoplefrontend-${CIRCLE_WORKFLOW_ID:0:7} --output text)
+            export BACKEND_IP=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filters Name=tag:Name,Values=udapeoplefrontend-${CIRCLE_WORKFLOW_ID:0:7} --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
@@ -388,7 +388,7 @@ jobs:
           name: Backend smoke test.
           command: |
             sleep 60
-            export BACKEND_IP=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filters Name=tag:project,Values=udapeoplefrontend-${CIRCLE_WORKFLOW_ID:0:7} --output text)
+            export BACKEND_IP=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filters Name=tag:Name,Values=udapeoplefrontend-${CIRCLE_WORKFLOW_ID:0:7} --output text)
             echo $BACKEND_IP
             echo "http://$BACKEND_IP:3030/api/status"
             if curl "${BACKEND_IP}:3030/api/status" | grep "ok"
