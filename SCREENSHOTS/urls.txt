@@ -2,13 +2,13 @@ URL01:
 https://github.com/Hawam/cdond-c3-projectstarter
 
 URL02:
-
+https://udapeople-c02e8b8.s3.amazonaws.com/index.html
 
 URL03:
 http://d3c9bpkzwbm0z4.cloudfront.net/
 
 URL04:
-http://:3030/api/status
+http://3.93.201.201:3030/api/status
 
 URL05:
 http://ec2-54-227-72-50.compute-1.amazonaws.com:9090/targets
