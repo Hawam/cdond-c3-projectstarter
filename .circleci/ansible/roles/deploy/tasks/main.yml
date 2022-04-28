@@ -1,21 +1,36 @@
----
-- name: Create udapeople backend directory
+- name: "install Ansible dependencies"
+  become: true
+  apt:
+    name: ["nodejs", "npm", "python3", "tar", "gzip", "git"]
+    state: latest
+    update_cache: yes
+
+- name: "install pm2"
+  become: true
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
+
+- name: "create the application directory"
+  become_user: ubuntu
+  become: yes
   file:
+    path: ~/app
     state: directory
-    path: /opt/udapeople-backend
-    owner: ubuntu
-    group: ubuntu
 
-- name: Deploy udapeople backend
+- name: "untar the backend app file"
+  become_user: ubuntu
+  become: yes
   unarchive:
-    src: ~/project/artifact.tar.gz
-    dest: /opt/udapeople-backend
-    owner: ubuntu
-    group: ubuntu
+    src: ~/backend.tar
+    dest: ~/app
 
-- name: Launch udapeople backend
+- name: "start PM2"
+  become_user: ubuntu
+  become: yes
   shell: |
-    cd /opt/udapeople-backend
-    npm install
-    pm2 stop default
-    pm2 start npm -- start
+    cd ~/app/backend
+    npm i
+    pm2 start npm --name backend -- start
