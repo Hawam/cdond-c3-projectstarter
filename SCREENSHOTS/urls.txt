@@ -2,7 +2,7 @@ URL01:
 https://github.com/Hawam/cdond-c3-projectstarter
 
 URL02:
-https://udapeople-c02e8b8.s3.amazonaws.com/index.html
+http://udapeople-c02e8b8.s3.amazonaws.com/index.html
 
 URL03:
 http://d3c9bpkzwbm0z4.cloudfront.net/
